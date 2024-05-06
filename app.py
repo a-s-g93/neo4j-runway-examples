@@ -1,4 +1,4 @@
-from typing import List, Dict, Any, Union
+# from typing import List, Dict, Any, Union
 
 import streamlit as st
 
@@ -39,7 +39,9 @@ if "user_input_gathered" not in st.session_state.keys():
         "uri": None,
         "database": None,
     }
-    st.session_state["summarizer"] = None
+    st.session_state["discovery"] = None
+    st.session_state["discovery_summary"] = None
+    st.session_state["modeler"] = None
     st.session_state["ingestion_code_generated"] = False
     st.session_state["model_iteration"] = 1
     st.session_state["disable_ingest"] = True
@@ -54,7 +56,7 @@ csv_loader(show=st.session_state["show_csv_loader"])
 
 if (
     st.session_state["user_input_gathered"]
-    and st.session_state["summarizer"] is not None
+    and st.session_state["discovery"] is not None
 ):
     print("Using LLM: ", st.session_state["model_name"])
 

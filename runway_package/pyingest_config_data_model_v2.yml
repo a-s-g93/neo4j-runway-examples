@@ -1,0 +1,105 @@
+server_uri: None
+admin_user: None
+admin_pass: None
+database: None
+basepath: file:./
+
+pre_ingest:
+  - CREATE CONSTRAINT country_name IF NOT EXISTS FOR (n:Country) REQUIRE n.name IS UNIQUE;
+files:
+- chunk_size: 100
+  cql: |
+    WITH $dict.rows AS rows
+    UNWIND rows AS row
+    MERGE (n:Country {name: row.name})
+  url: $BASE/./countries.csv
+- chunk_size: 100
+  cql: |-
+    WITH $dict.rows AS rows
+    UNWIND rows AS row
+    MERGE (n:Capital {})
+    SET n.capital = row.capital
+  url: $BASE/./countries.csv
+- chunk_size: 100
+  cql: |-
+    WITH $dict.rows AS rows
+    UNWIND rows AS row
+    MERGE (n:Region {})
+    SET n.region = row.region
+  url: $BASE/./countries.csv
+- chunk_size: 100
+  cql: |-
+    WITH $dict.rows AS rows
+    UNWIND rows AS row
+    MERGE (n:Subregion {})
+    SET n.subregion = row.subregion
+  url: $BASE/./countries.csv
+- chunk_size: 100
+  cql: |-
+    WITH $dict.rows AS rows
+    UNWIND rows AS row
+    MERGE (n:Currency {})
+    SET n.currencyName = row.currency_name
+  url: $BASE/./countries.csv
+- chunk_size: 100
+  cql: |-
+    WITH $dict.rows AS rows
+    UNWIND rows AS row
+    MERGE (n:Timezone {})
+    SET n.timezones = row.timezones
+  url: $BASE/./countries.csv
+- chunk_size: 100
+  cql: |-
+    WITH $dict.rows AS rows
+    UNWIND rows AS row
+    MERGE (n:GeographicalCoordinates {})
+    SET n.latitude = row.latitude, n.longitude = row.longitude
+  url: $BASE/./countries.csv
+- chunk_size: 100
+  cql: |
+    WITH $dict.rows AS rows
+    UNWIND rows as row
+    MATCH (source:Country {name: row.name})
+    MATCH (target:Capital {})
+    MERGE (source)-[n:HAS_CAPITAL]->(target)
+  url: $BASE/./countries.csv
+- chunk_size: 100
+  cql: |
+    WITH $dict.rows AS rows
+    UNWIND rows as row
+    MATCH (source:Country {name: row.name})
+    MATCH (target:Region {})
+    MERGE (source)-[n:BELONGS_TO_REGION]->(target)
+  url: $BASE/./countries.csv
+- chunk_size: 100
+  cql: |
+    WITH $dict.rows AS rows
+    UNWIND rows as row
+    MATCH (source:Country {name: row.name})
+    MATCH (target:Subregion {})
+    MERGE (source)-[n:BELONGS_TO_SUBREGION]->(target)
+  url: $BASE/./countries.csv
+- chunk_size: 100
+  cql: |
+    WITH $dict.rows AS rows
+    UNWIND rows as row
+    MATCH (source:Country {name: row.name})
+    MATCH (target:Currency {})
+    MERGE (source)-[n:USES_CURRENCY]->(target)
+  url: $BASE/./countries.csv
+- chunk_size: 100
+  cql: |
+    WITH $dict.rows AS rows
+    UNWIND rows as row
+    MATCH (source:Country {name: row.name})
+    MATCH (target:Timezone {})
+    MERGE (source)-[n:HAS_TIMEZONE]->(target)
+  url: $BASE/./countries.csv
+- chunk_size: 100
+  cql: |
+    WITH $dict.rows AS rows
+    UNWIND rows as row
+    MATCH (source:Country {name: row.name})
+    MATCH (target:GeographicalCoordinates {})
+    MERGE (source)-[n:LOCATED_IN]->(target)
+  url: $BASE/./countries.csv

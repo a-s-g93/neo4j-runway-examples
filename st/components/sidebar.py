@@ -5,7 +5,7 @@ import zipfile
 
 import streamlit as st
 
-from ingestion.generate_ingest import IngestionGenerator
+from neo4j_runway import IngestionGenerator
 
 
 def sidebar(content_file_path: str) -> None:
@@ -17,27 +17,26 @@ def sidebar(content_file_path: str) -> None:
     with open(content_file_path, "r") as f:
         content = f.read()
 
-    if st.session_state["summarizer"] is None:
+    if st.session_state["modeler"] is None:
         disable_model_select = False
     else:
         disable_model_select = True
     st.session_state["model_name"] = st.sidebar.radio(
         "Select LLM",
-        ["gpt-4-0125-preview", "gpt-3.5-turbo"],
+        ["gpt-4-0125-preview", "gpt-4-turbo-preview"],
         disabled=disable_model_select,
     )
     st.sidebar.markdown(content)
 
-    if st.session_state["summarizer"] is not None:
+    if st.session_state["modeler"] is not None:
         with st.sidebar.form("Data Model Version Select"):
             csv_dir = st.text_input(
                 label="Local CSV Location",
                 value="./",
                 placeholder="where is this file found?",
             )
-            # file_output_dir = st.text_input(label="")
             current_model_version = (
-                len(st.session_state["summarizer"].model_history) - 1
+                len(st.session_state["modeler"].model_history) - 1
             )
             version = st.number_input(
                 label="Select Data Model Version",
@@ -49,9 +48,8 @@ def sidebar(content_file_path: str) -> None:
             if st.form_submit_button("Generate Ingestion Code"):
 
                 st.session_state["ingestion_generator"] = IngestionGenerator(
-                    data_model=st.session_state["summarizer"]
-                    .model_history[version]
-                    .dict,
+                    data_model=st.session_state["modeler"]
+                    .model_history[version],
                     username=st.session_state["NEO4J_CREDENTIALS"]["username"],
                     password=st.session_state["NEO4J_CREDENTIALS"]["password"],
                     uri=st.session_state["NEO4J_CREDENTIALS"]["uri"],
@@ -65,7 +63,7 @@ def sidebar(content_file_path: str) -> None:
         st.sidebar.download_button(
             label=f"Data Model V{str(version)}",
             data=json.dumps(
-                st.session_state["summarizer"].model_history[version].model_dump()
+                st.session_state["modeler"].model_history[version].model_dump()
             ),
             file_name=f"data_model_v{str(version)}.json",
             mime="application/json",
@@ -109,7 +107,7 @@ def sidebar(content_file_path: str) -> None:
                 zip.writestr(
                     f"data_model_v{str(version)}.json",
                     json.dumps(
-                        st.session_state["summarizer"]
+                        st.session_state["modeler"]
                         .model_history[version]
                         .model_dump()
                     ),

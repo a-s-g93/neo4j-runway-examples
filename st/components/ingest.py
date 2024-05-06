@@ -1,7 +1,6 @@
 import streamlit as st
 
-from ingestion.generate_ingest import IngestionGenerator
-from neo4j_runway.main.ingestion.pyingest import PyIngestForStreamlit
+from neo4j_runway import IngestionGenerator, PyIngest
 
 
 def ingest(show: bool = True) -> None:
@@ -15,7 +14,7 @@ def ingest(show: bool = True) -> None:
 
         with st.form(key="data-model-version-select-pyingest-ingestion"):
             current_model_version = (
-                len(st.session_state["summarizer"].model_history) - 1
+                len(st.session_state["modeler"].model_history) - 1
             )
             version = st.number_input(
                 label="Select Data Model Version",
@@ -31,9 +30,8 @@ def ingest(show: bool = True) -> None:
             ):
 
                 gen_temp = IngestionGenerator(
-                    data_model=st.session_state["summarizer"]
-                    .model_history[version]
-                    .dict,
+                    data_model=st.session_state["modeler"]
+                    .model_history[version],
                     username=st.session_state["NEO4J_CREDENTIALS"]["username"],
                     password=st.session_state["NEO4J_CREDENTIALS"]["password"],
                     uri=st.session_state["NEO4J_CREDENTIALS"]["uri"],
@@ -44,14 +42,7 @@ def ingest(show: bool = True) -> None:
                 )
 
                 yaml = gen_temp.generate_pyingest_yaml_string()
-                # PyIngest(yaml_string=yaml)
-                # st.write(yaml)
-                prog_bar = st.progress(value=0.0, text="Ingesting...")
-                for prog in PyIngestForStreamlit(
-                    yaml_string=yaml, dataframe=st.session_state["dataframe"]
-                ):
-                    prog_bar.progress(value=prog, text="Ingesting...")
-                prog_bar.progress(value=prog, text="Ingestion Complete!")
+                PyIngest(yaml_string=yaml, dataframe=st.session_state["dataframe"])
                 st.session_state["disable_ingest"] = True
 
         # if st.button(label="Ingest", key="ingest-key"):

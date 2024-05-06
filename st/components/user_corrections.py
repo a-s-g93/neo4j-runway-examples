@@ -1,8 +1,5 @@
 import streamlit as st
 
-from summarizer.summarizer import Summarizer
-
-
 def user_corrections(show: bool = True) -> None:
     """
     Receives user input to inject into the iterate model prompt.

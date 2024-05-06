@@ -1,6 +1,6 @@
 import streamlit as st
 
-from utils.test_connection import test_database_connection
+from neo4j_runway.utils import test_database_connection
 
 
 def neo4j_credentials(show: bool = True) -> None:
