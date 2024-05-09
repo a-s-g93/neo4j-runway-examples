@@ -59,64 +59,73 @@
         "x": 209.43364843656647,
         "y": -279.86295267473423
       },
-      "caption": "name",
+      "caption": "",
       "labels": [
         "Person"
       ],
       "properties": {
-        "name": "name | str",
+        "name": "name | str | unique",
         "age": "age | int"
       },
       "style": {
-        "outside-position": "bottom-left"
+        "outside-position": "bottom",
+        "node-color": "#68bc00"
       }
     },
     {
       "id": "n1",
       "position": {
-        "x": 475.13320098151803,
-        "y": -126.46124448934336
+        "x": 572.2331024161601,
+        "y": -180.66469660748788
       },
-      "caption": "address",
+      "caption": "",
       "labels": [
         "Address"
       ],
       "properties": {
-        "address": "address | str"
+        "address": "address | str | unique"
       },
-      "style": {}
+      "style": {
+        "node-color": "#fda1ff",
+        "outside-position": "bottom"
+      }
     },
     {
       "id": "n2",
       "position": {
-        "x": 475.13320098151803,
-        "y": -433.2646608601251
+        "x": 572.2331024161601,
+        "y": -379.06120874198064
       },
-      "caption": "name",
+      "caption": "",
       "labels": [
         "Pet"
       ],
       "properties": {
-        "name": "pet_name | str",
+        "name": "pet_name | str | unique",
         "kind": "pet | str"
       },
-      "style": {}
+      "style": {
+        "node-color": "#68ccca"
+      }
     },
     {
       "id": "n3",
       "position": {
-        "x": 740.8327535264696,
+        "x": 900.26386884154,
         "y": -279.86295267473423
       },
-      "caption": "name",
+      "caption": "",
       "labels": [
         "Toy"
       ],
       "properties": {
-        "name": "toy | str",
+        "name": "toy | str | unique",
         "kind": "toy_type | str"
       },
-      "style": {}
+      "style": {
+        "node-color": "#aea1ff",
+        "outside-position": "bottom"
+      }
     }
   ],
   "relationships": [
@@ -127,19 +136,8 @@
       "type": "HAS_ADDRESS",
       "properties": {},
       "style": {
-        "detail-orientation": "horizontal"
-      }
-    },
-    {
-      "id": "n1",
-      "fromId": "n0",
-      "toId": "n0",
-      "type": "KNOWS",
-      "properties": {},
-      "style": {
-        "attachment-start": "top",
-        "attachment-end": "left",
-        "detail-orientation": "horizontal"
+        "detail-orientation": "horizontal",
+        "detail-position": "inline"
       }
     },
     {
@@ -149,7 +147,8 @@
       "type": "HAS_PET",
       "properties": {},
       "style": {
-        "detail-orientation": "horizontal"
+        "detail-orientation": "horizontal",
+        "detail-position": "inline"
       }
     },
     {
@@ -159,7 +158,8 @@
       "type": "PLAYS_WITH",
       "properties": {},
       "style": {
-        "detail-orientation": "horizontal"
+        "detail-orientation": "horizontal",
+        "detail-position": "inline"
       }
     }
   ]
