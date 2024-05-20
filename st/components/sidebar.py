@@ -21,11 +21,7 @@ def sidebar(content_file_path: str) -> None:
         disable_model_select = False
     else:
         disable_model_select = True
-    st.session_state["model_name"] = st.sidebar.radio(
-        "Select LLM",
-        ["gpt-4-0125-preview", "gpt-4-turbo-preview"],
-        disabled=disable_model_select,
-    )
+    st.session_state["model_name"] = "gpt-4o"
     st.sidebar.markdown(content)
 
     if st.session_state["modeler"] is not None:
@@ -36,7 +32,7 @@ def sidebar(content_file_path: str) -> None:
                 placeholder="where is this file found?",
             )
             current_model_version = (
-                len(st.session_state["modeler"].model_history) - 1
+                len(st.session_state["modeler"].model_history)
             )
             version = st.number_input(
                 label="Select Data Model Version",
@@ -49,7 +45,7 @@ def sidebar(content_file_path: str) -> None:
 
                 st.session_state["ingestion_generator"] = IngestionGenerator(
                     data_model=st.session_state["modeler"]
-                    .model_history[version],
+                    .model_history[version-1],
                     username=st.session_state["NEO4J_CREDENTIALS"]["username"],
                     password=st.session_state["NEO4J_CREDENTIALS"]["password"],
                     uri=st.session_state["NEO4J_CREDENTIALS"]["uri"],
@@ -63,7 +59,7 @@ def sidebar(content_file_path: str) -> None:
         st.sidebar.download_button(
             label=f"Data Model V{str(version)}",
             data=json.dumps(
-                st.session_state["modeler"].model_history[version].model_dump()
+                st.session_state["modeler"].model_history[version-1].model_dump()
             ),
             file_name=f"data_model_v{str(version)}.json",
             mime="application/json",
@@ -108,7 +104,7 @@ def sidebar(content_file_path: str) -> None:
                     f"data_model_v{str(version)}.json",
                     json.dumps(
                         st.session_state["modeler"]
-                        .model_history[version]
+                        .model_history[version-1]
                         .model_dump()
                     ),
                 )

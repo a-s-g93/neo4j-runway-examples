@@ -14,7 +14,7 @@ def ingest(show: bool = True) -> None:
 
         with st.form(key="data-model-version-select-pyingest-ingestion"):
             current_model_version = (
-                len(st.session_state["modeler"].model_history) - 1
+                len(st.session_state["modeler"].model_history)
             )
             version = st.number_input(
                 label="Select Data Model Version",

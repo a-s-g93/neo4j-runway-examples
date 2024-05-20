@@ -17,11 +17,11 @@ def initial_model(show: bool = True) -> None:
                         ), discovery=st.session_state["discovery"])
             st.session_state["modeler"].create_initial_model()
             # we iterate once to refine the first displayed model
-            st.session_state["modeler"].iterate_model(iterations=1)
-            st.session_state["initial_model_created"] = True
+            # st.session_state["modeler"].iterate_model(iterations=1)
+            # st.session_state["initial_model_created"] = True
 
-        st.json(st.session_state["modeler"].model_history[1].model_dump(), expanded=False)
+        st.json(st.session_state["modeler"].model_history[0].model_dump(), expanded=False)
         st.graphviz_chart(
-            st.session_state["modeler"].model_history[1].visualize(),
+            st.session_state["modeler"].model_history[0].visualize(),
             use_container_width=True,
         )

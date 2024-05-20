@@ -5,7 +5,6 @@ This application takes a CSV file and some optional data descriptions as input a
   - PyIngest yaml file
   - load_csv cypher file
   - constraints cypher file
-- Database size estimation
 - Automatic data loading service if Neo4j credentials are provided
 
 A free Neo4j Aura database can be created here: https://console.neo4j.io/
