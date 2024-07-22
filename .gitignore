@@ -5,6 +5,7 @@ resources/presentation_images/
 dockerfile
 private/
 agent-neo-langsmith.ipynb
+_.ipynb
 # test_downloads/data_model_v1.json
 
 # Byte-compiled / optimized / DLL files
