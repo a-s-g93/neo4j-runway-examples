@@ -3,37 +3,37 @@ CREATE CONSTRAINT address_city_street IF NOT EXISTS FOR (n:Address) REQUIRE (n.c
 CREATE CONSTRAINT pet_name IF NOT EXISTS FOR (n:Pet) REQUIRE n.name IS UNIQUE;
 CREATE CONSTRAINT toy_name IF NOT EXISTS FOR (n:Toy) REQUIRE n.name IS UNIQUE;
 CREATE CONSTRAINT shelter_name IF NOT EXISTS FOR (n:Shelter) REQUIRE n.name IS UNIQUE;
-:auto LOAD CSV WITH HEADERS FROM 'file:///pets-2.csv' as row
+:auto LOAD CSV WITH HEADERS FROM 'file:///./pets-2.csv' as row
 CALL {
     WITH row
     MERGE (n:Person {name: row.name})
-    SET n.age = row.age
+    SET n.age = toIntegerOrNull(row.age)
 } IN TRANSACTIONS OF 100 ROWS;
-:auto LOAD CSV WITH HEADERS FROM 'file:///pets-2.csv' as row
+:auto LOAD CSV WITH HEADERS FROM 'file:///./pets-2.csv' as row
 CALL {
     WITH row
     MERGE (n:Address {city: row.city, street: row.street})
     
 } IN TRANSACTIONS OF 100 ROWS;
-:auto LOAD CSV WITH HEADERS FROM 'file:///pets-2.csv' as row
+:auto LOAD CSV WITH HEADERS FROM 'file:///./pets-2.csv' as row
 CALL {
     WITH row
     MERGE (n:Pet {name: row.pet_name})
     SET n.kind = row.pet
 } IN TRANSACTIONS OF 100 ROWS;
-:auto LOAD CSV WITH HEADERS FROM 'file:///pets-2.csv' as row
+:auto LOAD CSV WITH HEADERS FROM 'file:///./pets-2.csv' as row
 CALL {
     WITH row
     MERGE (n:Toy {name: row.toy})
     SET n.kind = row.toy_type
 } IN TRANSACTIONS OF 100 ROWS;
-:auto LOAD CSV WITH HEADERS FROM 'file:///shelters-2.csv' as row
+:auto LOAD CSV WITH HEADERS FROM 'file:///./shelters-2.csv' as row
 CALL {
     WITH row
     MERGE (n:Shelter {name: row.shelter_name})
     
 } IN TRANSACTIONS OF 100 ROWS;
-:auto LOAD CSV WITH HEADERS FROM 'file:///pets-2.csv' as row
+:auto LOAD CSV WITH HEADERS FROM 'file:///./pets-2.csv' as row
 CALL {
     WITH row
     MATCH (source:Person {name: row.name})
@@ -41,7 +41,7 @@ CALL {
     MERGE (source)-[n:HAS_ADDRESS]->(target)
     
 } IN TRANSACTIONS OF 100 ROWS;
-:auto LOAD CSV WITH HEADERS FROM 'file:///pets-2.csv' as row
+:auto LOAD CSV WITH HEADERS FROM 'file:///./pets-2.csv' as row
 CALL {
     WITH row
     MATCH (source:Person {name: row.name})
@@ -49,7 +49,7 @@ CALL {
     MERGE (source)-[n:HAS_PET]->(target)
     
 } IN TRANSACTIONS OF 100 ROWS;
-:auto LOAD CSV WITH HEADERS FROM 'file:///pets-2.csv' as row
+:auto LOAD CSV WITH HEADERS FROM 'file:///./pets-2.csv' as row
 CALL {
     WITH row
     MATCH (source:Pet {name: row.pet_name})
@@ -57,7 +57,7 @@ CALL {
     MERGE (source)-[n:PLAYS_WITH]->(target)
     
 } IN TRANSACTIONS OF 100 ROWS;
-:auto LOAD CSV WITH HEADERS FROM 'file:///shelters-2.csv' as row
+:auto LOAD CSV WITH HEADERS FROM 'file:///./shelters-2.csv' as row
 CALL {
     WITH row
     MATCH (source:Pet {name: row.pet_name})
@@ -65,7 +65,7 @@ CALL {
     MERGE (source)-[n:FROM_SHELTER]->(target)
     
 } IN TRANSACTIONS OF 100 ROWS;
-:auto LOAD CSV WITH HEADERS FROM 'file:///shelters-2.csv' as row
+:auto LOAD CSV WITH HEADERS FROM 'file:///./shelters-2.csv' as row
 CALL {
     WITH row
     MATCH (source:Shelter {name: row.shelter_name})
@@ -73,11 +73,11 @@ CALL {
     MERGE (source)-[n:HAS_ADDRESS]->(target)
     
 } IN TRANSACTIONS OF 100 ROWS;
-:auto LOAD CSV WITH HEADERS FROM 'file:///pets-2.csv' as row
+:auto LOAD CSV WITH HEADERS FROM 'file:///./pets-2.csv' as row
 CALL {
     WITH row
     MATCH (source:Person {name: row.name})
-MATCH (target:Person {name: row.knows})
+    MATCH (target:Person {name: row.knows})
     MERGE (source)-[n:KNOWS]->(target)
     
 } IN TRANSACTIONS OF 100 ROWS;
